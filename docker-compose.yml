@@ -5,10 +5,11 @@ services:
     image: postgres:13
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: L@mpugn4n1
       POSTGRES_DB: sei
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./backend/src/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     ports:
       - "5432:5432"
     networks:
@@ -19,12 +20,17 @@ services:
     ports:
       - "3001:3001"
     environment:
-      DB_HOST: localhost
+      DB_HOST: db
       DB_USER: postgres
       DB_PASSWORD: L@mpugn4n1
-      DB_NAME: postgres
+      DB_NAME: sei
+      NODE_ENV: development
     depends_on:
       - db
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run dev
     networks:
       - sei-network
 
@@ -32,8 +38,13 @@ services:
     build: ./frontend
     ports:
       - "3000:3000"
+    environment:
+      VITE_API_URL: http://localhost:3001/api
     depends_on:
       - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     networks:
       - sei-network
 
