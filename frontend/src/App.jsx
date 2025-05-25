@@ -24,31 +24,37 @@ function App() {
       <div className="container mt-4">
         <Routes>
           <Route path="/" element={<Home />} />
-          
+
+          {/* Professores */}
           <Route path="/professores" element={<ProfessorList />} />
           <Route path="/professores/novo" element={<ProfessorForm />} />
           <Route path="/professores/editar/:id" element={<ProfessorForm />} />
-          <Route path="/professores/reativar/:id" element={<ReativarProfessor />} />
-          
+          <Route path="/professores/reativar" element={<ReativarProfessor />} />
+
+          {/* Disciplinas */}
           <Route path="/disciplinas" element={<DisciplinaList />} />
           <Route path="/disciplinas/novo" element={<DisciplinaForm />} />
           <Route path="/disciplinas/editar/:id" element={<DisciplinaForm />} />
-          <Route path="/disciplinas/reativar/:id" element={<ReativarDisciplina />} />
-          
+          <Route path="/disciplinas/reativar" element={<ReativarDisciplina />} />
+
+          {/* Locais */}
           <Route path="/locais" element={<LocalList />} />
           <Route path="/locais/novo" element={<LocalForm />} />
           <Route path="/locais/editar/:id" element={<LocalForm />} />
-          <Route path="/locais/reativar/:id" element={<ReativarLocal />} />
-          
+          <Route path="/locais/reativar" element={<ReativarLocal />} />
+
+          {/* Turmas */}
           <Route path="/turmas" element={<TurmaList />} />
           <Route path="/turmas/novo" element={<TurmaForm />} />
           <Route path="/turmas/editar/:id" element={<TurmaForm />} />
-          <Route path="/turmas/reativar/:id" element={<ReativarTurma />} />
-          
+          <Route path="/turmas/reativar" element={<ReativarTurma />} />
+
+          {/* Alunos */}
           <Route path="/alunos" element={<AlunoList />} />
           <Route path="/alunos/novo" element={<AlunoForm />} />
           <Route path="/alunos/editar/:id" element={<AlunoForm />} />
-          <Route path="/alunos/reativar/:id" element={<ReativarAluno />} />
+          <Route path="/alunos/reativar" element={<ReativarAluno />} />
+
         </Routes>
       </div>
     </>

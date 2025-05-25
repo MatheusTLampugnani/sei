@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 
-const ReativarProfessor = () => {
+const ReativarAluno = () => {
   const [inativos, setInativos] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -14,55 +14,54 @@ const ReativarProfessor = () => {
   const fetchInativos = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/professores?ativo=false');
+      const response = await api.get('/alunos?ativo=false');
       setInativos(response.data);
     } catch (error) {
-      console.error('Erro ao buscar professores inativos:', error);
+      console.error('Erro ao buscar alunos inativos:', error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleReativar = async (id) => {
-    if (window.confirm('Tem certeza que deseja reativar este professor?')) {
+    if (window.confirm('Tem certeza que deseja reativar este aluno?')) {
       try {
-        await api.patch(`/professores/${id}/reativar`);
-        fetchInativos(); // Atualiza a lista após reativar
+        await api.patch(`/alunos/${id}/reativar`);
+        fetchInativos(); // Atualiza a lista
       } catch (error) {
-        console.error('Erro ao reativar professor:', error);
-        alert('Erro ao reativar professor.');
+        console.error('Erro ao reativar aluno:', error);
+        alert('Erro ao reativar aluno.');
       }
     }
   };
 
   return (
     <div className="container mt-5">
-      <h1 className="mb-4">Reativar Professor</h1>
-      <p>Selecione um professor inativo para reativá-lo no sistema.</p>
-      <button className="btn btn-secondary mb-3" onClick={() => navigate('/professores')}>
+      <h1 className="mb-4">Reativar Aluno</h1>
+      <p>Selecione um aluno inativo para reativá-lo no sistema.</p>
+       <button className="btn btn-secondary mb-3" onClick={() => navigate('/alunos')}>
             Voltar para a Lista
-      </button>
-
+        </button>
       {loading ? <p>Carregando...</p> : (
         <table className="table table-hover table-bordered">
             <thead className="table-dark">
                 <tr>
                     <th>Nome</th>
                     <th>CPF</th>
-                    <th>Titulação</th>
+                    <th>Matrícula</th>
                     <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
-                {inativos.length > 0 ? inativos.map(prof => (
-                    <tr key={prof.idprofessor}>
-                        <td>{prof.nome}</td>
-                        <td>{prof.cpf}</td>
-                        <td>{prof.titulacao}</td>
+                {inativos.length > 0 ? inativos.map(aluno => (
+                    <tr key={aluno.idaluno}>
+                        <td>{aluno.nome}</td>
+                        <td>{aluno.cpf}</td>
+                        <td>{aluno.matricula}</td>
                         <td>
                             <button
                                 className="btn btn-success btn-sm"
-                                onClick={() => handleReativar(prof.idprofessor)}
+                                onClick={() => handleReativar(aluno.idaluno)}
                             >
                                 Reativar
                             </button>
@@ -70,7 +69,7 @@ const ReativarProfessor = () => {
                     </tr>
                 )) : (
                     <tr>
-                        <td colSpan="4" className="text-center">Nenhum professor inativo encontrado.</td>
+                        <td colSpan="4" className="text-center">Nenhum aluno inativo encontrado.</td>
                     </tr>
                 )}
             </tbody>
@@ -80,4 +79,4 @@ const ReativarProfessor = () => {
   );
 };
 
-export default ReativarProfessor;
+export default ReativarAluno;

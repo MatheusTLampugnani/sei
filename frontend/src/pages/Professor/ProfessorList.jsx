@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Adicionado useNavigate
 import api from '../../services/api';
 
 const ProfessorList = () => {
   const [professores, setProfessores] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: 'nome', direction: 'ascending' });
   const [searchTerm, setSearchTerm] = useState('');
+  const [showInactive, setShowInactive] = useState(false); // Adicionado
+  const navigate = useNavigate(); // Adicionado
 
   useEffect(() => {
     fetchProfessores();
-  }, []);
+  }, [showInactive]); // Adicionado showInactive como dependência
 
   const fetchProfessores = async () => {
     try {
-      const response = await api.get('/professores');
+      // Modificado para buscar ativos ou todos
+      const response = await api.get(`/professores?ativo=${!showInactive}`);
       setProfessores(response.data);
     } catch (error) {
       console.error('Erro ao buscar professores:', error);
@@ -39,8 +42,8 @@ const ProfessorList = () => {
   });
 
   const filteredProfessores = sortedProfessores.filter(professor =>
-    professor.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    professor.cpf.includes(searchTerm)
+    (professor.nome?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+    (professor.cpf || '').includes(searchTerm)
   );
 
   const handleDesativar = async (id) => {
@@ -55,71 +58,89 @@ const ProfessorList = () => {
   };
 
   return (
-    <div className="container">
-      <h1>Professores</h1>
-      <div className="mb-3">
-        <input
-          type="text"
-          placeholder="Buscar professor..."
-          className="form-control"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-      <Link to="/professores/novo" className="btn btn-primary mb-3">
-        Novo Professor
-      </Link>
+    <div className="container mt-5">
+      <h1 className="mb-4">Professores</h1>
+      <div className="row mb-3 align-items-center">
+            <div className="col-md-6">
+                <input
+                  type="text"
+                  placeholder="Buscar professor por nome ou CPF..."
+                  className="form-control"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+             <div className="col-md-2">
+                <div className="form-check">
+                    <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={showInactive}
+                        onChange={() => setShowInactive(!showInactive)}
+                        id="showInactiveCheckProf"
+                    />
+                    <label className="form-check-label" htmlFor="showInactiveCheckProf">
+                        Mostrar Inativos
+                    </label>
+                </div>
+            </div>
+            <div className="col-md-4 text-end">
+                <Link to="/professores/novo" className="btn btn-primary me-2">
+                    Novo Professor
+                </Link>
+                {/* Modificado para link para tela de Reativar */}
+                 <Link to="/professores/reativar" className="btn btn-info">
+                    Reativar Professor
+                </Link>
+            </div>
+       </div>
       <div className="table-responsive">
-        <table className="table table-striped">
-          <thead>
+        <table className="table table-hover table-bordered">
+          <thead className="table-dark">
             <tr>
-              <th onClick={() => handleSort('nome')}>
-                Nome {sortConfig.key === 'nome' && (
-                  sortConfig.direction === 'ascending' ? '↑' : '↓'
-                )}
-              </th>
-              <th onClick={() => handleSort('cpf')}>
-                CPF {sortConfig.key === 'cpf' && (
-                  sortConfig.direction === 'ascending' ? '↑' : '↓'
-                )}
-              </th>
+              <th onClick={() => handleSort('nome')}>Nome</th>
+              <th onClick={() => handleSort('cpf')}>CPF</th>
               <th>Titulação</th>
+              <th>Email</th>
               <th>Status</th>
               <th>Ações</th>
             </tr>
           </thead>
           <tbody>
             {filteredProfessores.map((professor) => (
-              <tr key={professor.idProfessor}>
+              <tr key={professor.idprofessor}> {/* Chave ajustada */}
                 <td>{professor.nome}</td>
                 <td>{professor.cpf}</td>
                 <td>{professor.titulacao}</td>
-                <td>{professor.status}</td>
+                <td>{professor.email}</td>
+                <td>
+                    <span className={`badge ${professor.status === 'ATIVO' ? 'bg-success' : 'bg-danger'}`}>
+                        {professor.status}
+                    </span>
+                </td>
                 <td>
                   <Link
-                    to={`/professores/editar/${professor.idProfessor}`}
-                    className="btn btn-sm btn-warning me-2"
+                    to={`/professores/editar/${professor.idprofessor}`} // Chave ajustada
+                    className="btn btn-sm btn-warning me-1"
+                    title="Editar"
                   >
-                    Editar
                   </Link>
                   {professor.status === 'ATIVO' ? (
                     <button
-                      onClick={() => handleDesativar(professor.idProfessor)}
-                      className="btn btn-sm btn-danger me-2"
+                      onClick={() => handleDesativar(professor.idprofessor)} // Chave ajustada
+                      className="btn btn-sm btn-danger"
+                      title="Desativar"
                     >
-                      Desativar
                     </button>
-                  ) : (
-                    <Link
-                      to={`/professores/reativar/${professor.idProfessor}`}
-                      className="btn btn-sm btn-success me-2"
-                    >
-                      Reativar
-                    </Link>
-                  )}
+                  ) : null }
                 </td>
               </tr>
             ))}
+             {filteredProfessores.length === 0 && (
+                <tr>
+                    <td colSpan="6" className="text-center">Nenhum professor encontrado.</td>
+                </tr>
+            )}
           </tbody>
         </table>
       </div>
