@@ -1,23 +1,22 @@
-// src/utils/validators.js
-
-/**
- * Valida um CPF.
- * @param {string} cpf 
- * @returns {boolean} 
- */
 function validarCPF(cpf) {
   if (typeof cpf !== 'string') return false;
-  cpf = cpf.replace(/[^\d]+/g, '');
+  cpf = cpf.replace(/[^\d]/g, ''); // Remove caracteres não numéricos
+
   if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) return false;
 
-  cpf = cpf.split('').map(el => +el);
+  const digitos = cpf.split('').map(el => +el);
+  
+  const resto = (offset) => digitos
+    .slice(0, 9 + offset)
+    .reduce((sum, el, index) => sum + el * (10 + offset - index), 0) % 11;
 
-  const rest = (count) => (cpf.slice(0, count - 12)
-    .reduce((soma, el, index) => (soma + el * (count - index)), 0) * 10) % 11 % 10;
+  const digitoVerificador1 = resto(0) < 2 ? 0 : 11 - resto(0);
+  if (digitoVerificador1 !== digitos[9]) return false;
+  
+  const digitoVerificador2 = resto(1) < 2 ? 0 : 11 - resto(1);
+  if (digitoVerificador2 !== digitos[10]) return false;
 
-  return rest(10) === cpf[9] && rest(11) === cpf[10];
+  return true;
 }
 
-module.exports = {
-  validarCPF
-};
+module.exports = { validarCPF };

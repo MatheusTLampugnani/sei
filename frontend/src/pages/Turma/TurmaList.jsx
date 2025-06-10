@@ -97,10 +97,11 @@ const TurmaList = () => {
               <td>{turma.local_nome}</td>
               <td><span className={`badge ${turma.status === 'ATIVA' ? 'bg-success' : 'bg-danger'}`}>{turma.status}</span></td>
               <td>
-                <Link to={`/turmas/editar/${turma.idturma}`} className="btn btn-sm btn-warning me-1" title="Editar">✏️</Link>
-                 {turma.status === 'ATIVA' && (
+                <Link to={`/turmas/editar/${turma.idturma}`} className="btn btn-sm btn-warning me-2" title="Editar">✏️</Link>
+                <Link to={`/turmas/${turma.idturma}/alunos`} className="btn btn-sm btn-info me-2" title="Gerenciar Alunos">👥</Link>
+                {turma.status === 'ATIVA' && (
                     <button onClick={() => handleDesativar(turma.idturma)} className="btn btn-sm btn-danger" title="Desativar">🗑️</button>
-                 )}
+                )}
               </td>
             </tr>
           ))}

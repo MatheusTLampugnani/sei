@@ -36,6 +36,12 @@ class TurmaService {
       throw new Error('Local não encontrado ou inativo');
     }
 
+    // VERIFICAÇÃO DE CONFLITO
+    const conflito = await Turma.checkConflito(dados.idLocal, dados.dia_semana, dados.horario_inicio, dados.horario_termino);
+    if (conflito) {
+      throw new Error(`Conflito de horário: Já existe a turma "${conflito.nome}" neste local e horário.`);
+    }
+
     return Turma.create(dados);
   }
 
@@ -66,6 +72,12 @@ class TurmaService {
       }
     }
 
+    // VERIFICAÇÃO DE CONFLITO
+    const conflito = await Turma.checkConflito(dados.idLocal, dados.dia_semana, dados.horario_inicio, dados.horario_termino, id);
+    if (conflito) {
+        throw new Error(`Conflito de horário: Já existe a turma "${conflito.nome}" neste local e horário.`);
+    }
+
     return Turma.update(id, dados);
   }
 
@@ -75,7 +87,7 @@ class TurmaService {
       throw new Error('Turma não encontrada');
     }
 
-    return ativo 
+    return ativo
       ? Turma.reativar(id)
       : Turma.desativar(id);
   }
