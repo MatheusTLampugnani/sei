@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { toast } from 'react-toastify';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -15,7 +13,7 @@ const Login = () => {
             if (response.data.auth) {
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('user', JSON.stringify(response.data.user));
-                navigate('/');
+                window.location.href = '/'; 
             }
         } catch (error) {
             console.error('Erro de login:', error);

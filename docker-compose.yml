@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: L@mpugn4n1
-      POSTGRES_DB: sei
+      POSTGRES_DB: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./backend/src/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
@@ -18,10 +18,10 @@ services:
     ports:
       - "3001:3001"
     environment:
-      DB_HOST: db
+      DB_HOST: localhost
       DB_USER: postgres
       DB_PASSWORD: L@mpugn4n1
-      DB_NAME: sei
+      DB_NAME: postgres
       NODE_ENV: development
     depends_on:
       - db

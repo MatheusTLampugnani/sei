@@ -5,17 +5,16 @@ BEGIN
     END IF;
 END$$;
 
-CREATE TABLE IF NOT EXISTS app_user (
+CREATE TABLE IF NOT EXISTS "user" (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Senha padrão 'admin'
-INSERT INTO app_user (username, password_hash)
-SELECT 'admin', '$2a$10$f3.Z.gY.z.C8Lz4aP0U/b.6L8Kk3nSg8hP9Q9jZ6kP9lQ0w2rB4rO'
-WHERE NOT EXISTS (SELECT 1 FROM app_user WHERE username = 'admin');
+INSERT INTO "user" (username, password_hash)
+SELECT 'admin', 'admin'
+WHERE NOT EXISTS (SELECT 1 FROM "user" WHERE username = 'admin');
 
 CREATE TABLE IF NOT EXISTS Professor (
     idProfessor SERIAL PRIMARY KEY,

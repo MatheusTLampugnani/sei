@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 module.exports = {
   db: {
     user: process.env.DB_USER,
@@ -7,5 +9,5 @@ module.exports = {
     database: process.env.DB_NAME,
   },
   port: process.env.PORT || 3001,
-  jwtSecret: process.env.JWT_SECRET
+  jwtSecret: process.env.JWT_SECRET,
 };

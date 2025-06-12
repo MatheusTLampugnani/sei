@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 class User {
   static async findByUsername(username) {
-    const result = await db.query('SELECT * FROM app_user WHERE username = $1', [username]);
+    const result = await db.query('SELECT * FROM user WHERE username = $1', [username]);
     return result.rows[0];
   }
 
