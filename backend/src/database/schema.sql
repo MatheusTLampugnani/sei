@@ -5,17 +5,6 @@ BEGIN
     END IF;
 END$$;
 
-CREATE TABLE IF NOT EXISTS "user" (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(100) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
-INSERT INTO "user" (username, password_hash)
-SELECT 'admin', 'admin'
-WHERE NOT EXISTS (SELECT 1 FROM "user" WHERE username = 'admin');
-
 CREATE TABLE IF NOT EXISTS Professor (
     idProfessor SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,

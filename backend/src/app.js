@@ -1,10 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const config = require('./config');
-const verifyToken = require('./middleware/authMiddleware');
 
-// Import routes
-const authRoutes = require('./routes/authRoutes');
+// Importar rotas
 const professorRoutes = require('./routes/professorRoutes');
 const disciplinaRoutes = require('./routes/disciplinaRoutes');
 const localRoutes = require('./routes/localRoutes');
@@ -16,21 +14,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Public route
-app.use('/api/auth', authRoutes);
-
-// Protected routes
-app.use('/api/professores', verifyToken, professorRoutes);
-app.use('/api/disciplinas', verifyToken, disciplinaRoutes);
-app.use('/api/locais', verifyToken, localRoutes);
-app.use('/api/turmas', verifyToken, turmaRoutes);
-app.use('/api/alunos', verifyToken, alunoRoutes);
-
+// Todas as rotas agora são públicas
+app.use('/api/professores', professorRoutes);
+app.use('/api/disciplinas', disciplinaRoutes);
+app.use('/api/locais', localRoutes);
+app.use('/api/turmas', turmaRoutes);
+app.use('/api/alunos', alunoRoutes);
 
 app.get('/health', (req, res) => {
-  res.status(200).json({
+  res.status(200).json({ 
     status: 'UP',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString() 
   });
 });
 
