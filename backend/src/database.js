@@ -20,5 +20,6 @@ pool.on('error', (err) => {
 
 module.exports = {
   query: (text, params) => pool.query(text, params),
-  getClient: () => pool.connect(), // Para transações, se necessário
+  getClient: () => pool.connect(),
+  pool,
 };

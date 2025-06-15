@@ -20,7 +20,7 @@ class TurmaService {
   static async criarTurma(dados) {
     // Verifica se a disciplina existe
     const disciplina = await Disciplina.findById(dados.idDisciplina);
-    if (!disciplina || disciplina.status !== 'ATIVA') {
+    if (!disciplina || disciplina.status !== 'ATIVO') {
       throw new Error('Disciplina não encontrada ou inativa');
     }
 
@@ -53,7 +53,7 @@ class TurmaService {
 
     if (dados.idDisciplina) {
       const disciplina = await Disciplina.findById(dados.idDisciplina);
-      if (!disciplina || disciplina.status !== 'ATIVA') {
+      if (!disciplina || disciplina.status !== 'ATIVO') {
         throw new Error('Disciplina não encontrada ou inativa');
       }
     }

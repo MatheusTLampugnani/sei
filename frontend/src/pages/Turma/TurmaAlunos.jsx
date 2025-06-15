@@ -41,19 +41,25 @@ const TurmaAlunos = () => {
 
   const handleAddAluno = async () => {
     if (!alunoSelecionado) {
-      alert('Por favor, selecione um aluno para adicionar.');
+      toast.warn('Por favor, selecione um aluno para adicionar.');
       return;
     }
     try {
       await api.post(`/turmas/${id}/alunos/${alunoSelecionado}`);
-      alert('Aluno adicionado com sucesso!');
+      toast.success('Aluno adicionado com sucesso!');
+
+      const alunoAdicionado = alunosDisponiveis.find(a => a.idaluno.toString() === alunoSelecionado);
+      if (alunoAdicionado) {
+          setAlunosMatriculados(prev => [...prev, alunoAdicionado]);
+          setAlunosDisponiveis(prev => prev.filter(a => a.idaluno.toString() !== alunoSelecionado));
+      }
       setAlunoSelecionado('');
-      fetchDados(); // Re-fetch all data
     } catch (error) {
       console.error('Erro ao adicionar aluno:', error);
-      alert(error.response?.data?.error || 'Ocorreu um erro ao adicionar o aluno.');
+      toast.error(error.response?.data?.error || 'Ocorreu um erro ao adicionar o aluno.');
     }
   };
+
 
   const handleRemoveAluno = async (idAluno) => {
     if (window.confirm('Tem certeza que deseja remover este aluno da turma?')) {

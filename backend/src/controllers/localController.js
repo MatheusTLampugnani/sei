@@ -1,96 +1,64 @@
-const Local = require('../models/Local');
+const LocalService = require('../services/localService');
 
 class LocalController {
-  // Listar todos os locais
   static async listarLocais(req, res) {
     try {
-      const ativo = req.query.ativo !== 'false'; // default true
-      const locais = await Local.findAll(ativo);
+      const ativo = req.query.ativo !== 'false';
+      const locais = await LocalService.listarLocais(ativo);
       res.json(locais);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }
 
-  // Obter um local por ID
   static async obterLocal(req, res) {
     try {
-      const local = await Local.findById(req.params.id);
-      if (!local) {
-        return res.status(404).json({ error: 'Local não encontrado' });
-      }
+      const local = await LocalService.obterLocal(req.params.id);
       res.json(local);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(404).json({ error: error.message });
     }
   }
 
-  // Criar um novo local
   static async criarLocal(req, res) {
     try {
-      if (await Local.findByNome(req.body.nome)) {
-        return res.status(400).json({ error: 'Já existe um local com este nome' });
-      }
-
-      const novoLocal = await Local.create(req.body);
+      const novoLocal = await LocalService.criarLocal(req.body);
       res.status(201).json(novoLocal);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(400).json({ error: error.message });
     }
   }
 
-  // Atualizar um local
   static async atualizarLocal(req, res) {
     try {
-      const localExistente = await Local.findById(req.params.id);
-      if (!localExistente) {
-        return res.status(404).json({ error: 'Local não encontrado' });
-      }
-
-      if (req.body.nome && req.body.nome !== localExistente.nome) {
-        const nomeEmUso = await Local.findByNome(req.body.nome);
-        if (nomeEmUso) {
-          return res.status(400).json({ error: 'Nome já está em uso por outro local' });
-        }
-      }
-
-      const localAtualizado = await Local.update(req.params.id, req.body);
-      res.json(localAtualizado);
+      const local = await LocalService.atualizarLocal(req.params.id, req.body);
+      res.json(local);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(400).json({ error: error.message });
     }
   }
 
-  // Desativar um local
   static async desativarLocal(req, res) {
     try {
-      const localDesativado = await Local.desativar(req.params.id);
-      if (!localDesativado) {
-        return res.status(404).json({ error: 'Local não encontrado' });
-      }
-      res.json(localDesativado);
+      const local = await LocalService.alterarStatusLocal(req.params.id, false);
+      res.json(local);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(404).json({ error: error.message });
     }
   }
 
-  // Reativar um local
   static async reativarLocal(req, res) {
     try {
-      const localReativado = await Local.reativar(req.params.id);
-      if (!localReativado) {
-        return res.status(404).json({ error: 'Local não encontrado' });
-      }
-      res.json(localReativado);
+      const local = await LocalService.alterarStatusLocal(req.params.id, true);
+      res.json(local);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(404).json({ error: error.message });
     }
   }
 
-  // Contar total de locais
   static async contarLocais(req, res) {
     try {
-      const total = await Local.count();
+      const total = await LocalService.contarLocais();
       res.json({ total });
     } catch (error) {
       res.status(500).json({ error: error.message });

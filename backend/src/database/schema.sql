@@ -1,11 +1,13 @@
+SET search_path TO public;
+
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'status_enum') THEN
-        CREATE TYPE status_enum AS ENUM ('ATIVO', 'INATIVO', 'ATIVA');
+        CREATE TYPE status_enum AS ENUM ('ATIVO', 'INATIVO');
     END IF;
 END$$;
 
-CREATE TABLE IF NOT EXISTS Professor (
+CREATE TABLE IF NOT EXISTS professor (
     idProfessor SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE,
@@ -14,25 +16,25 @@ CREATE TABLE IF NOT EXISTS Professor (
     status status_enum NOT NULL DEFAULT 'ATIVO'
 );
 
-CREATE TABLE IF NOT EXISTS Disciplina (
+CREATE TABLE IF NOT EXISTS disciplina (
     idDisciplina SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     codigo VARCHAR(10) UNIQUE NOT NULL,
     periodo VARCHAR(50) NOT NULL,
     carga_horaria INT,
     modalidade VARCHAR(100),
-    status status_enum NOT NULL DEFAULT 'ATIVA'
+    status status_enum NOT NULL DEFAULT 'ATIVO'
 );
 
-CREATE TABLE IF NOT EXISTS Local (
+CREATE TABLE IF NOT EXISTS local (
     idLocal SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL UNIQUE,
-    local VARCHAR(100) NOT NULL,
+    "local" VARCHAR(100) NOT NULL,
     capacidade INT NOT NULL,
     status status_enum NOT NULL DEFAULT 'ATIVO'
 );
 
-CREATE TABLE IF NOT EXISTS Aluno (
+CREATE TABLE IF NOT EXISTS aluno (
     idAluno SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     data_nascimento DATE,
@@ -43,7 +45,7 @@ CREATE TABLE IF NOT EXISTS Aluno (
     status status_enum NOT NULL DEFAULT 'ATIVO'
 );
 
-CREATE TABLE IF NOT EXISTS Turma (
+CREATE TABLE IF NOT EXISTS turma (
     idTurma SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     ano_semestre VARCHAR(10),
@@ -55,21 +57,21 @@ CREATE TABLE IF NOT EXISTS Turma (
     idLocal INT NOT NULL,
     idDisciplina INT NOT NULL,
     idProfessor INT NOT NULL,
-    status status_enum NOT NULL DEFAULT 'ATIVA',
-    FOREIGN KEY (idLocal) REFERENCES Local (idLocal),
-    FOREIGN KEY (idDisciplina) REFERENCES Disciplina (idDisciplina),
-    FOREIGN KEY (idProfessor) REFERENCES Professor (idProfessor)
+    status status_enum NOT NULL DEFAULT 'ATIVO',
+    FOREIGN KEY (idLocal) REFERENCES local (idLocal),
+    FOREIGN KEY (idDisciplina) REFERENCES disciplina (idDisciplina),
+    FOREIGN KEY (idProfessor) REFERENCES professor (idProfessor)
 );
 
-CREATE TABLE IF NOT EXISTS Turma_has_aluno (
+CREATE TABLE IF NOT EXISTS turma_has_aluno (
     idTurma INT NOT NULL,
     idAluno INT NOT NULL,
     PRIMARY KEY (idTurma, idAluno),
-    FOREIGN KEY (idTurma) REFERENCES Turma (idTurma),
-    FOREIGN KEY (idAluno) REFERENCES Aluno (idAluno)
+    FOREIGN KEY (idTurma) REFERENCES turma (idTurma),
+    FOREIGN KEY (idAluno) REFERENCES aluno (idAluno)
 );
 
-CREATE INDEX IF NOT EXISTS idx_professor_nome ON Professor (nome);
-CREATE INDEX IF NOT EXISTS idx_disciplina_nome ON Disciplina (nome);
-CREATE INDEX IF NOT EXISTS idx_aluno_nome ON Aluno (nome);
-CREATE INDEX IF NOT EXISTS idx_turma_nome ON Turma (nome);
+CREATE INDEX IF NOT EXISTS idx_professor_nome ON professor (nome);
+CREATE INDEX IF NOT EXISTS idx_disciplina_nome ON disciplina (nome);
+CREATE INDEX IF NOT EXISTS idx_aluno_nome ON aluno (nome);
+CREATE INDEX IF NOT EXISTS idx_turma_nome ON yurma (nome);
