@@ -39,16 +39,21 @@ const Home = () => {
     }, []);
 
     return (
-        <div className="container mt-5 text-center">
-            <h1 className="mb-4">Bem-vindo ao SEI - Sistema Educacional Integrado!</h1>
+        <div className="container mt-5">
+            <div className="p-5 mb-4 bg-dark text-white rounded-3 shadow-sm">
+                <div className="container-fluid py-5">
+                    <h1 className="display-5 fw-bold">Sistema Educacional Integrado</h1>
+                    <p className="col-md-8 fs-4">Bem-vindo ao painel de controle. Gerencie alunos, professores, turmas e muito mais de forma centralizada.</p>
+                </div>
+            </div>
 
-            {loading ? <p>Carregando estatísticas...</p> : (
+            {loading ? <div className="text-center"><p>Carregando estatísticas...</p></div> : (
                 <div className="row justify-content-center g-4">
-                    <DashboardCard title="Alunos" count={counts.alunos} link="/alunos"/>
-                    <DashboardCard title="Professores" count={counts.professores} link="/professores"/>
-                    <DashboardCard title="Disciplinas" count={counts.disciplinas} link="/disciplinas"/>
-                    <DashboardCard title="Locais" count={counts.locais} link="/locais"/>
-                    <DashboardCard title="Turmas" count={counts.turmas} link="/turmas"/>
+                    <DashboardCard title="Alunos" count={counts.alunos} link="/alunos" icon="bi-people-fill"/>
+                    <DashboardCard title="Professores" count={counts.professores} link="/professores" icon="bi-person-video3"/>
+                    <DashboardCard title="Disciplinas" count={counts.disciplinas} link="/disciplinas" icon="bi-book-half"/>
+                    <DashboardCard title="Locais" count={counts.locais} link="/locais" icon="bi-geo-alt-fill"/>
+                    <DashboardCard title="Turmas" count={counts.turmas} link="/turmas" icon="bi-collection-fill"/>
                 </div>
             )}
         </div>
@@ -57,12 +62,12 @@ const Home = () => {
 
 const DashboardCard = ({ title, count, link, icon }) => (
     <div className="col-md-4 col-lg-2">
-        <div className="card h-100 shadow-sm">
+        <div className="card h-100 shadow-sm text-center card-hover">
             <div className="card-body d-flex flex-column justify-content-center align-items-center">
-                <div className="fs-1 mb-2">{icon}</div>
+                <i className={`bi ${icon} fs-1 mb-2 text-primary`}></i>
                 <h5 className="card-title">{title}</h5>
-                <p className="card-text fs-3 fw-bold">{count}</p>
-                <Link to={link} className="btn btn-outline-primary mt-auto">
+                <p className="card-text display-6 fw-bold">{count}</p>
+                <Link to={link} className="btn btn-outline-primary mt-auto stretched-link">
                     Gerenciar
                 </Link>
             </div>
