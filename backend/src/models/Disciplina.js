@@ -12,8 +12,8 @@ class Disciplina {
   static async findAll(ativo = true) {
     const query = ativo
       ? "SELECT * FROM public.disciplina WHERE status = 'ATIVO' ORDER BY nome"
-      : 'SELECT * FROM public.disciplina ORDER BY nome';
-    const params = []; // No longer need params for status
+      : "SELECT * FROM public.disciplina WHERE status = 'INATIVO' ORDER BY nome";
+    const params = [];
     const result = await db.query(query, params);
     return result.rows;
   }

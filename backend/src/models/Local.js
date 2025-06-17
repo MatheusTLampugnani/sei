@@ -12,7 +12,7 @@ class Local {
   static async findAll(ativo = true) {
     const query = ativo
       ? "SELECT * FROM public.local WHERE status = 'ATIVO' ORDER BY nome"
-      : 'SELECT * FROM public.local ORDER BY nome';
+      : "SELECT * FROM public.local WHERE status = 'INATIVO' ORDER BY nome";
     const params = [];
     const result = await db.query(query, params);
     return result.rows;

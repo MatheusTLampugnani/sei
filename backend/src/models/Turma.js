@@ -25,9 +25,10 @@ class Turma {
         JOIN public.disciplina d ON t.idDisciplina = d.idDisciplina
         JOIN public.professor p ON t.idProfessor = p.idProfessor
         JOIN public.local l ON t.idLocal = l.idLocal
+        WHERE t.status = 'INATIVO' -- Adicionado este filtro
         ORDER BY t.nome`;
-    const params = [];
-    const result = await db.query(query, params);
+        
+    const result = await db.query(query);
     return result.rows;
   }
 

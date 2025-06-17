@@ -12,7 +12,7 @@ class Professor {
   static async findAll(ativo = true) {
     const query = ativo
       ? "SELECT * FROM public.professor WHERE status = 'ATIVO' ORDER BY nome"
-      : 'SELECT * FROM public.professor ORDER BY nome';
+      : "SELECT * FROM public.professor WHERE status = 'INATIVO' ORDER BY nome";
     const result = await db.query(query);
     return result.rows;
   }

@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import api from '../services/api';
 import { Link } from 'react-router-dom';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import api from '../services/api';
 
 const Home = () => {
     const [counts, setCounts] = useState({
-        alunos: 0,
-        professores: 0,
-        disciplinas: 0,
-        locais: 0,
-        turmas: 0,
+        alunos: 0, professores: 0, disciplinas: 0, locais: 0, turmas: 0,
     });
+    const [date, setDate] = useState(new Date());
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -46,16 +45,33 @@ const Home = () => {
                     <p className="col-md-8 fs-4">Bem-vindo ao painel de controle. Gerencie alunos, professores, turmas e muito mais de forma centralizada.</p>
                 </div>
             </div>
-
-            {loading ? <div className="text-center"><p>Carregando estatísticas...</p></div> : (
-                <div className="row justify-content-center g-4">
-                    <DashboardCard title="Alunos" count={counts.alunos} link="/alunos" icon="bi-people-fill"/>
-                    <DashboardCard title="Professores" count={counts.professores} link="/professores" icon="bi-person-video3"/>
-                    <DashboardCard title="Disciplinas" count={counts.disciplinas} link="/disciplinas" icon="bi-book-half"/>
-                    <DashboardCard title="Locais" count={counts.locais} link="/locais" icon="bi-geo-alt-fill"/>
-                    <DashboardCard title="Turmas" count={counts.turmas} link="/turmas" icon="bi-collection-fill"/>
+            <div className="row justify-content-center g-4 mb-5">
+                {loading ? <div className="text-center"><p>Carregando estatísticas...</p></div> : (
+                    <>
+                        <DashboardCard title="Alunos" count={counts.alunos} link="/alunos" icon="bi-people-fill"/>
+                        <DashboardCard title="Professores" count={counts.professores} link="/professores" icon="bi-person-video3"/>
+                        <DashboardCard title="Disciplinas" count={counts.disciplinas} link="/disciplinas" icon="bi-book-half"/>
+                        <DashboardCard title="Locais" count={counts.locais} link="/locais" icon="bi-geo-alt-fill"/>
+                        <DashboardCard title="Turmas" count={counts.turmas} link="/turmas" icon="bi-collection-fill"/>
+                    </>
+                )}
+            </div>
+            <div className="row justify-content-center mt-4">
+                <div className="col-lg-8 col-md-10">
+                    <div className="card shadow-sm h-100">
+                        <div className="card-header bg-dark text-white">
+                            <h5 className="mb-0"><i className="bi bi-calendar-event me-2"></i>Calendário Acadêmico</h5>
+                        </div>
+                        <div className="card-body d-flex justify-content-center">
+                             <Calendar
+                                onChange={setDate}
+                                value={date}
+                                className="border-0"
+                            />
+                        </div>
+                    </div>
                 </div>
-            )}
+            </div>
         </div>
     );
 };

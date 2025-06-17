@@ -6,7 +6,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          <img src="/img sei.png" alt="SEI Logo" width="100" height="80" className="d-inline-block align-text-top me-2" />
+          <img src="/img sei.png" alt="SEI Logo" width="130" height="100" className="d-inline-block align-text-top me-2" />
         </Link>
         <button
           className="navbar-toggler"
@@ -20,7 +20,7 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul className="navbar-nav me-auto mb-5 mb-lg-0">
             <li className="nav-item">
               <NavLink className="nav-link" aria-current="page" to="/" end>
                 Home
