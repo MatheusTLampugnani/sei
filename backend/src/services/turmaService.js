@@ -18,25 +18,21 @@ class TurmaService {
   }
 
   static async criarTurma(dados) {
-    // Verifica se a disciplina existe
     const disciplina = await Disciplina.findById(dados.idDisciplina);
     if (!disciplina || disciplina.status !== 'ATIVO') {
       throw new Error('Disciplina não encontrada ou inativa');
     }
 
-    // Verifica se o professor existe
     const professor = await Professor.findById(dados.idProfessor);
     if (!professor || professor.status !== 'ATIVO') {
       throw new Error('Professor não encontrado ou inativo');
     }
 
-    // Verifica se o local existe
     const local = await Local.findById(dados.idLocal);
     if (!local || local.status !== 'ATIVO') {
       throw new Error('Local não encontrado ou inativo');
     }
 
-    // VERIFICAÇÃO DE CONFLITO
     const conflito = await Turma.checkConflito(dados.idLocal, dados.dia_semana, dados.horario_inicio, dados.horario_termino);
     if (conflito) {
       throw new Error(`Conflito de horário: Já existe a turma "${conflito.nome}" neste local e horário.`);

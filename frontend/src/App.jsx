@@ -1,11 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-// Componentes
 import Navbar from './components/Navbar';
-
-// Páginas
 import Home from './pages/Home';
 import ProfessorList from './pages/Professor/ProfessorList';
 import ProfessorForm from './pages/Professor/ProfessorForm';

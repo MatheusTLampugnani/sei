@@ -22,7 +22,6 @@ class Professor {
     return result.rows[0];
   }
 
-  // FUNÇÃO ADICIONADA
   static async findByCpf(cpf) {
     const result = await db.query('SELECT * FROM public.professor WHERE cpf = $1', [cpf]);
     return result.rows[0];
@@ -52,7 +51,6 @@ class Professor {
     return result.rows[0];
   }
 
-  // FUNÇÃO ADICIONADA
   static async count() {
     const result = await db.query('SELECT COUNT(*) FROM public.professor');
     return parseInt(result.rows[0].count);

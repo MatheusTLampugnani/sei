@@ -66,7 +66,7 @@ const TurmaAlunos = () => {
       try {
         await api.delete(`/turmas/${id}/alunos/${idAluno}`);
         alert('Aluno removido com sucesso!');
-        fetchDados(); // Re-fetch all data
+        fetchDados();
       } catch (error) {
         console.error('Erro ao remover aluno:', error);
         alert(error.response?.data?.error || 'Ocorreu um erro ao remover o aluno.');
