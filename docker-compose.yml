@@ -32,8 +32,7 @@ services:
         condition: service_healthy
     volumes:
       - ./backend:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run dev
+    command: npm start
     networks:
       - sei-network
 
